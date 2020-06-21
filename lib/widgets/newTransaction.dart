@@ -74,7 +74,7 @@ class _NewTransactionState extends State<NewTransaction> {
               width: double.infinity,
               child: Text(
                 'Add a new transaction'.toUpperCase(),
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.headline1,
               ),
             ),
             Divider(
@@ -84,6 +84,7 @@ class _NewTransactionState extends State<NewTransaction> {
             ),
             TextField(
               controller: _titleController,
+              textCapitalization: TextCapitalization.sentences,
               autofocus: true,
               decoration: InputDecoration(
                 labelText: 'Title',

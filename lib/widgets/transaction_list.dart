@@ -13,24 +13,27 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
       child: _myTransactions.isEmpty
-          ? Column(
-              children: <Widget>[
-                Text(
-                  'There is no transactions yet!',
-                  style: Theme.of(context).textTheme.title,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                    height: 200,
-                    child: Image.asset(
-                      'assets/img/waiting.png',
-                      fit: BoxFit.fill,
-                    )),
-              ],
+          ? LayoutBuilder(
+              builder: (ctx, constraints) {
+                return Column(
+                  children: <Widget>[
+                    Text(
+                      'There is no transactions yet!',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                        height: constraints.maxHeight * 0.5,
+                        child: Image.asset(
+                          'assets/img/waiting.png',
+                          fit: BoxFit.fill,
+                        )),
+                  ],
+                );
+              },
             )
           : ListView.builder(
               padding: const EdgeInsets.all(8),
@@ -48,7 +51,10 @@ class TransactionList extends StatelessWidget {
                   ),
                   title: Text(
                     _myTransactions[index].title,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline1,
                   ),
                   subtitle: Text(
                       DateFormat.yMd().format(_myTransactions[index].date)),

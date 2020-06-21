@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
@@ -28,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static int _transactionId = 0;
+  bool _showChart = false;
 
   final List<Transaction> _transactions = [];
 
@@ -59,8 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _handleUpdateTransaction(
-      int txId, String txTitle, double txAmount, DateTime txDate) {
+  void _handleUpdateTransaction(int txId, String txTitle, double txAmount, DateTime txDate) {
     setState(() {
       _transactions
           .elementAt(_transactions.indexWhere((tx) => tx.id == txId))
@@ -83,21 +84,71 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Daily Expenses'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _showAddTransaction(context),
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final AppBar appBar = AppBar(
+      title: Text('Daily Expenses'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _showAddTransaction(context),
+        ),
+      ],
+    );
+    final windowSize = {
+      'height': mediaQuery.size.height -
+          appBar.preferredSize.height -
+          mediaQuery.padding.top,
+      'width': mediaQuery.size.width,
+    };
+    Widget txListWidget(double ratio) {
+      return Container(
+        height: windowSize['height'] * ratio,
+        child: TransactionList(_transactions, _txDelete, _txModify),
+      );
+    }
+
+    Widget chartBarWidget(double ratio) {
+      return Container(
+        height: windowSize['height'] * ratio,
+        child: Chart(_transactions),
+      );
+    }
+
+    final switchWidget = Container(
+      height: windowSize['height'] * 0.2,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Show Chart: '),
+          Switch(
+            value: _showChart,
+            onChanged: (value) {
+              setState(() {
+                _showChart = value;
+              });
+            },
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Chart(_transactions),
-          TransactionList(_transactions, _txDelete, _txModify),
-        ],
+    );
+
+    return Scaffold(
+      appBar: appBar,
+      body: SingleChildScrollView(
+        child: isLandscape
+            ? Column(
+                children: [
+                  switchWidget,
+                  _showChart ? chartBarWidget(0.8) : txListWidget(0.8),
+                ],
+              )
+            : Column(
+                children: <Widget>[
+                  chartBarWidget(0.3),
+                  txListWidget(0.7),
+                ],
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,

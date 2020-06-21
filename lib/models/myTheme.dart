@@ -9,21 +9,21 @@ class MyTheme {
     return ThemeData(
       primarySwatch: _primarySwatch,
       accentColor: _accentColor,
-      cardTheme: CardTheme(
-        elevation: 4,
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      ),
-      textTheme: TextTheme(
-        title: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: _primarySwatch,
-        ),
-        button: TextStyle(
-          color: _buttonTextColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      cardTheme: ThemeData.light().cardTheme.copyWith(
+            elevation: 4,
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          ),
+      textTheme: ThemeData.light().textTheme.copyWith(
+            headline1: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: _primarySwatch,
+            ),
+            button: TextStyle(
+              color: _buttonTextColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
     );
   }
 }

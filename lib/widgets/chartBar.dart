@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 
 class ChartBar extends StatelessWidget {
@@ -10,50 +11,59 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Container(
-          height: 20,
-          child: FittedBox(
-            child: Text('\$${_totalAmount.toStringAsFixed(0)}'),
-          ),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Container(
-          height: 100,
-          width: 20,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  color: Color.fromRGBO(220, 220, 220, 1),
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Container(
+              height: constraints.maxHeight * 0.1,
+              child: FittedBox(
+                child: Text('\$${_totalAmount.toStringAsFixed(0)}'),
               ),
-              FractionallySizedBox(
-                heightFactor: _pctOfDay,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.circular(10),
+            ),
+            SizedBox(
+              height: constraints.maxHeight * 0.05,
+            ),
+            Container(
+              height: constraints.maxHeight * 0.7,
+              width: 30,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      color: Color.fromRGBO(220, 220, 220, 1),
+                    ),
                   ),
-                ),
+                  FractionallySizedBox(
+                    heightFactor: _pctOfDay,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColorDark,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Text('$_dayLabel'),
-      ],
+            ),
+            SizedBox(
+              height: constraints.maxHeight * 0.05,
+            ),
+            Container(
+              height: constraints.maxHeight * 0.1,
+              child: FittedBox(
+                child: Text('$_dayLabel'),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
